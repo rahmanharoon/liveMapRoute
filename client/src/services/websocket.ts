@@ -1,14 +1,13 @@
 import { io, Socket } from 'socket.io-client';
-import { IVehicleWebSocketData } from '@interfaces/vehicle.interface';
 
-const SOCKET_SERVER_URL =
-  import.meta.env.VITE_SOCKET_SERVER_URL || 'http://localhost:3000';
+import { IVehicleWebSocketData } from '@interfaces/vehicle.interface';
+import config from '@utils/config';
 
 let socket: Socket | null = null;
 
 export const connectWebSocket = (): Socket => {
   if (!socket) {
-    socket = io(SOCKET_SERVER_URL, {
+    socket = io(config.socketServerUrl, {
       transports: ['websocket'],
       reconnection: true,
       reconnectionDelay: 1000,

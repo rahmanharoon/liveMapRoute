@@ -54,8 +54,6 @@ This application provides real-time tracking of a vehicle (plate number: `DXB-CX
 - Trip start/end detection
 
 ✅ **UI Components**
-- Reusable Button component (variants: primary, secondary, outline, danger)
-- Reusable ModalWrapper component (portal-based, keyboard support)
 - Vehicle information popup (top-right panel)
 - Responsive layout
 
@@ -216,7 +214,7 @@ The project follows a **camelCase** naming convention for all folders and files:
 ```
 src/
 ├── components/          # Reusable UI components
-│   ├── common/         # Common components (Button, ModalWrapper)
+│   ├── common/         # Common components
 │   ├── layout/         # Layout components
 │   └── map/            # Map-related components
 │       └── vehicleMarker/
@@ -316,7 +314,6 @@ Tests are located in the `tests/` folder, mirroring the `src/` structure:
 The project uses path aliases for cleaner imports:
 
 ```typescript
-import Button from '@components/common/button';
 import { IVehicleData } from '@types/vehicle.interface';
 import { calculateDistance } from '@utils/calculations/haversine';
 import { useVehicleTracking } from '@hooks/useVehicleTracking';

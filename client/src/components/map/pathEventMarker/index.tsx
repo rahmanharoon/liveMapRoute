@@ -1,8 +1,10 @@
-import React from 'react';
+import { FC, memo } from 'react';
 import { Marker } from 'react-map-gl';
+
 import idleIcon from '@assets/idle-icon.svg';
 import stopIcon from '@assets/stop-icon.svg';
 import type { PathEventType } from '@interfaces/vehicle.interface';
+
 import styles from './styles.module.scss';
 
 export interface IPathEventMarkerProps {
@@ -16,7 +18,7 @@ const iconByType: Record<PathEventType, string> = {
   stop: stopIcon,
 };
 
-const PathEventMarker: React.FC<IPathEventMarkerProps> = ({
+const PathEventMarker: FC<IPathEventMarkerProps> = ({
   type,
   latitude,
   longitude,
@@ -33,4 +35,6 @@ const PathEventMarker: React.FC<IPathEventMarkerProps> = ({
   );
 };
 
-export default PathEventMarker;
+PathEventMarker.displayName = 'PathEventMarker';
+
+export default memo(PathEventMarker);

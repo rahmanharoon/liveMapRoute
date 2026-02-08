@@ -1,28 +1,28 @@
-import React, { useMemo, useRef, useEffect } from 'react';
+import React, { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import Map, { Source, Layer, MapRef } from 'react-map-gl';
-
 import { useDispatch, useSelector } from 'react-redux';
+
 import type { RootState, AppDispatch } from '@store/index';
 import { updateMapState } from '@store/slices/mapSlice';
 import VehicleMarker from './vehicleMarker';
 import PathEventMarker from './pathEventMarker';
+import VehiclePopup from '@components/modals/vehiclePopup';
+import config from '@utils/config';
 
 import styles from './styles.module.scss';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-export interface IMapProps {
-  onVehicleClick?: () => void;
-}
+const mapboxToken = config.mapboxToken;
 
-const MapComponent: React.FC<IMapProps> = ({ onVehicleClick }) => {
+const MapComponent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const mapRef = useRef<MapRef>(null);
+  // state
+  const [isPopupOpen, setIsPopupOpen] = useState(true);
   const { zoom, center, bearing } = useSelector((state: RootState) => state.map);
   const { currentVehicle, positionHistory, pathEvents } = useSelector(
     (state: RootState) => state.vehicle
   );
-
-  const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN || '';
 
   const vehiclePathGeoJson = useMemo(() => {
     if (positionHistory.length < 2) return null;
@@ -47,7 +47,7 @@ const MapComponent: React.FC<IMapProps> = ({ onVehicleClick }) => {
     }
   }, [currentVehicle?.longitude, currentVehicle?.latitude]);
 
-  const handleMapMove = (event: any) => {
+  const handleMapMove = useCallback((event: { viewState: { zoom: number; longitude: number; latitude: number; bearing: number } }) => {
     const { viewState } = event;
     dispatch(
       updateMapState({
@@ -56,7 +56,21 @@ const MapComponent: React.FC<IMapProps> = ({ onVehicleClick }) => {
         bearing: viewState.bearing,
       })
     );
-  };
+  }, [dispatch]);
+
+  const handleVehicleMarkerClick = useCallback(() => {
+    setIsPopupOpen((prev) => !prev);
+  }, []);
+
+  const initialViewState = useMemo(
+    () => ({
+      longitude: center[0],
+      latitude: center[1],
+      zoom,
+      bearing,
+    }),
+    [center, zoom, bearing]
+  );
 
   if (!mapboxToken) {
     return (
@@ -71,12 +85,7 @@ const MapComponent: React.FC<IMapProps> = ({ onVehicleClick }) => {
       <Map
         ref={mapRef}
         mapboxAccessToken={mapboxToken}
-        initialViewState={{
-          longitude: center[0],
-          latitude: center[1],
-          zoom: zoom,
-          bearing: bearing,
-        }}
+        initialViewState={initialViewState}
         style={{ width: '100%', height: '100%' }}
         mapStyle="mapbox://styles/mapbox/dark-v11"
         onMove={handleMapMove}
@@ -110,10 +119,11 @@ const MapComponent: React.FC<IMapProps> = ({ onVehicleClick }) => {
             latitude={currentVehicle.latitude}
             longitude={currentVehicle.longitude}
             heading={currentVehicle.heading}
-            onClick={onVehicleClick}
+            onClick={handleVehicleMarkerClick}
           />
         )}
       </Map>
+      <VehiclePopup isOpen={isPopupOpen && !!currentVehicle} />
     </div>
   );
 };

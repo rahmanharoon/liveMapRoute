@@ -1,17 +1,21 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import {
   connectWebSocket,
   disconnectWebSocket,
   subscribeToVehicle,
   unsubscribeFromVehicle,
 } from '@services/websocket';
-import type { IVehicleWebSocketData } from '@interfaces/vehicle.interface';
+import { useVehicleTracking } from './useVehicleTracking';
 
 export type WebSocketStatus = 'disconnected' | 'connecting' | 'connected' | 'error';
 
-export const useWebSocket = (plateNumber: string) => {
+const PLATE_NUMBER = 'DXB-CX-36357';
+
+export const useWebSocket = () => {
   const [status, setStatus] = useState<WebSocketStatus>('disconnected');
-  const [data, setData] = useState<IVehicleWebSocketData | null>(null);
+  const { updateVehicleData } = useVehicleTracking();
+  const updateVehicleDataRef = useRef(updateVehicleData);
+  updateVehicleDataRef.current = updateVehicleData;
 
   useEffect(() => {
     const socket = connectWebSocket();
@@ -34,27 +38,27 @@ export const useWebSocket = (plateNumber: string) => {
 
     setStatus('connecting');
 
-    subscribeToVehicle(plateNumber, (vehicleData) => {
-      setData(vehicleData);
+    subscribeToVehicle(PLATE_NUMBER, (vehicleData) => {
       setStatus('connected');
+      updateVehicleDataRef.current(vehicleData);
     });
 
     return () => {
-      unsubscribeFromVehicle(plateNumber);
+      unsubscribeFromVehicle(PLATE_NUMBER);
       socket.off('connect', handleConnect);
       socket.off('disconnect', handleDisconnect);
       socket.off('connect_error', handleError);
     };
-  }, [plateNumber]);
+  }, []);
 
   const reconnect = useCallback(() => {
     disconnectWebSocket();
     connectWebSocket();
-    subscribeToVehicle(plateNumber, (vehicleData) => {
-      setData(vehicleData);
+    subscribeToVehicle(PLATE_NUMBER, (vehicleData) => {
       setStatus('connected');
+      updateVehicleDataRef.current(vehicleData);
     });
-  }, [plateNumber]);
+  }, []);
 
-  return { status, data, reconnect };
+  return { status, reconnect };
 };

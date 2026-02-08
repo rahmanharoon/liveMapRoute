@@ -1,6 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import { FC, memo, useEffect, useRef } from 'react';
 import { Marker } from 'react-map-gl';
+
 import arrowIcon from '@assets/arrow-icon.svg';
+
 import styles from './styles.module.scss';
 
 export interface IVehicleMarkerProps {
@@ -10,7 +12,7 @@ export interface IVehicleMarkerProps {
   onClick?: () => void;
 }
 
-const VehicleMarker: React.FC<IVehicleMarkerProps> = ({
+const VehicleMarker: FC<IVehicleMarkerProps> = ({
   latitude,
   longitude,
   heading = 0,
@@ -38,4 +40,6 @@ const VehicleMarker: React.FC<IVehicleMarkerProps> = ({
   );
 };
 
-export default VehicleMarker;
+VehicleMarker.displayName = 'VehicleMarker';
+
+export default memo(VehicleMarker);

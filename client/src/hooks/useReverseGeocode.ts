@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
+import config from '@utils/config';
 
 interface IGeocodeFeature {
   place_name: string;
@@ -23,7 +22,7 @@ export const useReverseGeocode = (
     if (
       latitude == null ||
       longitude == null ||
-      !MAPBOX_TOKEN
+      !config.mapboxToken
     ) {
       setPlaceName(null);
       return;
@@ -33,7 +32,7 @@ export const useReverseGeocode = (
     setLoading(true);
     setError(null);
 
-    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${MAPBOX_TOKEN}&limit=1`;
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${config.mapboxToken}&limit=1`;
 
     fetch(url)
       .then((res) => res.json())

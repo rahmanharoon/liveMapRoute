@@ -1,28 +1,24 @@
-import React from 'react';
+import { useSelector } from 'react-redux';
 import { Fuel } from 'lucide-react';
+
 import speedIcon from '@assets/speed-icon.svg';
-import styles from './styles.module.scss';
-import { IVehicleData } from '@interfaces/vehicle.interface';
-import { ITripMetrics } from '@interfaces/trip.interface';
+import type { RootState } from '@store/index';
 import { useReverseGeocode } from '@hooks/useReverseGeocode';
 
-export interface IVehiclePopupProps {
+import styles from './styles.module.scss';
+
+interface IVehiclePopupProps {
   isOpen: boolean;
-  vehicle: IVehicleData | null;
-  tripMetrics: ITripMetrics | null;
 }
 
-const VehiclePopup: React.FC<IVehiclePopupProps> = ({
-  isOpen,
-  vehicle,
-  tripMetrics,
-}) => {
-  // const { placeName } = useReverseGeocode(
-  //   vehicle?.latitude ?? null,
-  //   vehicle?.longitude ?? null
-  // );
+const VehiclePopup = ({ isOpen }: IVehiclePopupProps) => {
+  const vehicle = useSelector((state: RootState) => state.vehicle.currentVehicle);
+  const tripMetrics = useSelector((state: RootState) => state.trip.metrics);
+  const { placeName } = useReverseGeocode(
+    vehicle?.latitude ?? null,
+    vehicle?.longitude ?? null
+  );
 
-  const placeName = '1234567890';
 
   if (!isOpen || !vehicle) return null;
 
