@@ -13,6 +13,11 @@
     - [Subscribe to Vehicle](#subscribe-to-vehicle)
     - [Unsubscribe from Vehicle](#unsubscribe-from-vehicle)
     - [Vehicle Data](#vehicle-data)
+- [Client Information](#client-information)
+  - [Environment](#environment)
+  - [Running](#running)
+  - [Building](#building)
+  - [Tests](#tests)
 
 ## Setup Instructions
 
@@ -139,6 +144,57 @@ Communication between the frontend and backend utilizes specific WebSocket event
 - **Dependencies**:
   - Vite: Fast frontend build tool.
   - Other dependencies as specified in `package.json`.
+
+
+## Client Information
+
+Basic client setup and commands are below. For more details (architecture, folder structure, testing, env reference), see [client/README.md](client/README.md).
+
+### Environment
+
+From the `client/` directory, create a `.env` file:
+
+```env
+VITE_MAPBOX_TOKEN=your_mapbox_access_token_here
+VITE_SOCKET_SERVER_URL=http://localhost:3000
+```
+
+- `VITE_MAPBOX_TOKEN` — Required for map rendering ([mapbox.com](https://www.mapbox.com/)).
+- `VITE_SOCKET_SERVER_URL` — Optional; WebSocket server URL (default: `http://localhost:3000`).
+
+### Running
+
+From the `client/` directory:
+
+```bash
+npm run dev
+```
+
+App runs at [http://localhost:5173/](http://localhost:5173/). Ensure the backend WebSocket server is running (e.g. `http://localhost:3000`).
+
+### Building
+
+From the `client/` directory:
+
+```bash
+npm run build
+```
+
+Output is in `client/dist/`. To serve the production build locally:
+
+```bash
+npm run preview
+```
+
+### Tests
+
+From the `client/` directory:
+
+```bash
+npm test
+```
+- `npm run test:watch` — run tests in watch mode.
+- `npm run test:coverage` — run tests with coverage report.
 
 For any issues or contributions, please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file or open an issue in the repository.
 

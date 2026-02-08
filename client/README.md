@@ -351,34 +351,6 @@ The application strictly follows the provided design mockup:
 7. **Battery Percentage**: Currently using speed as a proxy (in production, this would come from vehicle data)
 8. **Address Display**: Shows coordinates (reverse geocoding not implemented)
 
-## Future Improvements
-
-### High Priority
-- [ ] Reverse geocoding for address display
-- [ ] Real battery/fuel level from vehicle data
-- [ ] Error boundaries for graceful error handling
-- [ ] Loading states and connection status indicators
-- [ ] Better mobile touch interactions
-
-### Medium Priority
-- [ ] Vehicle path markers (idle, stop events)
-- [ ] Trip history and playback
-- [ ] Multiple vehicle support
-- [ ] Map controls customization
-- [ ] Export trip data (CSV/JSON)
-
-### Nice to Have
-- [ ] Dark/light theme toggle
-- [ ] Custom map styles
-- [ ] Offline mode with service workers
-- [ ] Push notifications for events
-- [ ] Analytics dashboard
-- [ ] Performance monitoring
-
-## License
-
-This project is licensed under the MIT License.
-
 ---
 
 **Note**: Ensure the backend WebSocket server is running before starting the frontend application. The default WebSocket URL is `http://localhost:3000`, but this can be configured via the `VITE_SOCKET_SERVER_URL` environment variable.
