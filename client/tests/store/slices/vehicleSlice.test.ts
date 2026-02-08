@@ -1,9 +1,10 @@
 import vehicleReducer, {
   setVehicleData,
+  addPathEvent,
   clearVehicleData,
   setMaxHistorySize,
 } from '@store/slices/vehicleSlice';
-import { IVehicleData } from '@interfaces/vehicle.interface';
+import { IVehicleData, IPathEvent } from '@interfaces/vehicle.interface';
 
 describe('vehicleSlice', () => {
   const mockVehicleData: IVehicleData = {
@@ -51,5 +52,35 @@ describe('vehicleSlice', () => {
       setVehicleData({ ...mockVehicleData, timestamp: Date.now() + 2000 })
     );
     expect(state.positionHistory).toHaveLength(2);
+  });
+
+  it('should handle addPathEvent', () => {
+    const event: IPathEvent = {
+      type: 'stop',
+      latitude: 25.1,
+      longitude: 55.1,
+      timestamp: Date.now(),
+    };
+    const state = vehicleReducer(undefined, addPathEvent(event));
+    expect(state.pathEvents).toHaveLength(1);
+    expect(state.pathEvents[0]).toEqual(event);
+  });
+
+  it('should limit pathEvents to maxPathEvents', () => {
+    let state = vehicleReducer(undefined, setMaxHistorySize(2));
+    state = vehicleReducer(state, setMaxHistorySize(2));
+    const event: IPathEvent = {
+      type: 'stop',
+      latitude: 25.1,
+      longitude: 55.1,
+      timestamp: Date.now(),
+    };
+    for (let i = 0; i < 55; i++) {
+      state = vehicleReducer(
+        state,
+        addPathEvent({ ...event, timestamp: event.timestamp + i })
+      );
+    }
+    expect(state.pathEvents.length).toBeLessThanOrEqual(50);
   });
 });

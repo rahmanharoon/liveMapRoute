@@ -1,0 +1,20 @@
+{
+	"extends": "./tsconfig.app.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+		"paths": {
+			"@components/*": ["./src/components/*"],
+			"@pages/*": ["./src/pages/*"],
+			"@utils/*": ["./src/utils/*"],
+			"@hooks/*": ["./src/hooks/*"],
+			"@store/*": ["./src/store/*"],
+			"@interfaces/*": ["./src/interfaces/*"],
+			"@services/*": ["./src/services/*"],
+			"@styles/*": ["./src/styles/*"],
+			"@assets/*": ["./src/assets/*"]
+		}
+	},
+	"include": ["src", "tests"]
+}

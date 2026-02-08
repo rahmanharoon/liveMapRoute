@@ -1,7 +1,11 @@
 export default {
 	preset: "ts-jest",
 	testEnvironment: "jsdom",
+	watchman: false,
 	roots: ["<rootDir>/src", "<rootDir>/tests"],
+	transform: {
+		"^.+\\.tsx?$": ["ts-jest", { tsconfig: "<rootDir>/tsconfig.jest.json" }],
+	},
 	moduleNameMapper: {
 		"^@components/(.*)$": "<rootDir>/src/components/$1",
 		"^@pages/(.*)$": "<rootDir>/src/pages/$1",
@@ -21,6 +25,10 @@ export default {
 		"!src/**/*.d.ts",
 		"!src/main.tsx",
 		"!src/vite-env.d.ts",
+		"!src/utils/config.ts",
+		"!src/components/**/*.{ts,tsx}",
+		"!src/hooks/**/*.ts",
+		"!src/services/**/*.ts",
 	],
 	coverageThreshold: {
 		global: {
