@@ -1,8 +1,11 @@
+/** Vehicle status from telemetry (use for type-safe comparisons) */
+export type VehicleStatus = 'moving' | 'idle' | 'stopped';
+
 export interface IVehicleData {
   plateNumber: string;
   latitude: number;
   longitude: number;
-  status: string;
+  status: VehicleStatus | string;
   timestamp: number;
   heading?: number;
   speed?: number;
